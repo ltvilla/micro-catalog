@@ -1,5 +1,6 @@
 import './bootstrap';
 import {ApplicationConfig, MicroCatalogApplication} from './application';
+import {RestServer} from "@loopback/rest";
 
 export * from './application';
 
@@ -8,7 +9,8 @@ export async function main(options: ApplicationConfig = {}) {
   await app.boot();
   await app.start();
 
-  const url = app.restServer.url;
+  const restServer = app.getSync<RestServer>('servers.RestServer')
+  const url = restServer.url;
   console.log(`Server is running at ${url}`);
   console.log(`Try ${url}/ping`);
 
@@ -31,6 +33,13 @@ if (require.main === module) {
         // useful when used with OpenAPI-to-GraphQL to locate your application
         setServersFromRequest: true,
       },
+      rabbitmq: {
+        uri: process.env.RABBITMQ_URI,
+        // exchanges: [
+        //   {name: 'teste1', type: 'direct'},
+        //   {name: 'teste2', type: 'direct'}
+        // ]
+      }
     },
   };
   main(config).catch(err => {

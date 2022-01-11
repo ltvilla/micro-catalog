@@ -1,5 +1,6 @@
 import {ApplicationConfig} from '@loopback/core';
 import {MicroCatalogApplication} from './application';
+import {RestServer} from "@loopback/rest";
 
 /**
  * Export the OpenAPI spec from the application
@@ -14,7 +15,8 @@ async function exportOpenApiSpec(): Promise<void> {
   const outFile = process.argv[2] ?? '';
   const app = new MicroCatalogApplication(config);
   await app.boot();
-  await app.exportOpenApiSpec(outFile);
+  const restServer = app.getSync<RestServer>('servers.RestServer');
+  await restServer.exportOpenApiSpec(outFile);
 }
 
 exportOpenApiSpec().catch(err => {

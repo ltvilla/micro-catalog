@@ -3,7 +3,8 @@ export default {
   ...dataSource,
   "connector": "esv6",
   "index": "catalog",
-  "apiVersion": "7",
+  "version": 7,
+  "debug": process.env.APP_ENV === 'devs',
   // "defaultSize": "",
   "configuration": {
     "node": process.env.ELASTIC_SEARCH_HOST,
@@ -11,6 +12,32 @@ export default {
     "pingTimeout": process.env.ELASTIC_SEARCH_PING_TIMEOUT
   },
   "mappingProperties": {
-
+    "docType": {
+      "type": "keyword"
+    },
+    "id": {
+      "type": "keyword",
+    },
+    "name": {
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "ignore_above": 256
+        }
+      }
+    },
+    "description": {
+      "type": "text",
+    },
+    "is_active": {
+      "type": "boolean"
+    },
+    "created_at": {
+      "type": "date"
+    },
+    "updated_at": {
+      "type": "date"
+    }
   }
 }
