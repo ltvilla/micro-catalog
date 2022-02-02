@@ -1,19 +1,19 @@
 import {injectable, /* inject, */ BindingScope} from '@loopback/core';
 import {rabbitmqSubscribeDecorator} from '../decorators';
 import {repository} from "@loopback/repository";
-import {CategoryRepository} from "../repositories";
+import {GenreRepository} from "../repositories";
 import {Message} from "amqplib";
 
 @injectable({scope: BindingScope.SINGLETON})
-export class CategorySyncService {
+export class GenreSyncService {
   constructor(
-    @repository(CategoryRepository) private repo: CategoryRepository,
+    @repository(GenreRepository) private repo: GenreRepository,
   ) {}
 
   @rabbitmqSubscribeDecorator({
     exchange: 'amq.topic',
-    queue: 'micro-catalog/sync-videos/category',
-    routingKey: 'model.category.*'
+    queue: 'micro-catalog/sync-videos/cast_member',
+    routingKey: 'model.cast_member.*'
   })
   async handler({data, message}: {data: any, message: Message}) {
     const action = message.fields.routingKey.split('.')[2]

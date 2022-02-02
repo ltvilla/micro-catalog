@@ -41,7 +41,6 @@ export class RabbitmqServer extends Context implements Server {
     });
     await this.setupExchanges();
     await this.bindSubscribers();
-    // this.boot();
   }
 
   private async setupExchanges() {
